@@ -32,9 +32,3 @@ Si deseas contribuir a **appNotas**, sigue estos pasos:
 4. Realiza tus cambios y commitea: `git commit -m 'Añadir nueva característica'`.
 5. Haz un *push* a tu repositorio *forked*: `git push origin feature/tu-caracteristica`.
 6. Abre un *pull request* en el repositorio principal.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](https://github.com/tu-usuario/appNotas/blob/main/LICENSE) para obtener más información.
-
-appNotas es una herramienta elegante para mantener tus notas organizadas y accesibles en todo momento. ¡Comienza a utilizarla hoy y lleva un registro de tus ideas y tareas de manera eficiente!
