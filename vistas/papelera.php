@@ -6,7 +6,7 @@ include("../conexion/conexion.php");
 $conn = new conexion();
 
 // Establecer consulta de selección a la tabla empleados
-$sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado FROM notas n INNER JOIN usuarios u ON n.id_usuario = u.id INNER JOIN categorias c ON u.id = c.id WHERE estado = 2;";
+$sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado FROM notas n INNER JOIN usuarios u ON n.id_usuario = u.id INNER JOIN categorias c ON u.id = c.id WHERE estado = 0;";
 
 // Ejecutar la consulta SQL
 $res = $conn->MostrarSQL($sql);
