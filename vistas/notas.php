@@ -27,6 +27,10 @@ function getCardClass($noteDate)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Notas</title>
 </head>
 
@@ -59,17 +63,46 @@ function getCardClass($noteDate)
                             <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
                             <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
                             <button class="btn btn-info mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                            <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
+                            <button class="btn btn-danger mx-2 eliminar-nota" data-id="<?php echo $row['id']; ?>">
+                                <i class="fa fa-trash"></i> Eliminar
+                            </button>
                         </div>
                     </div>
                 </div>
             <?php } ?>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $(".eliminar-nota").click(function() {
+                var idNota = $(this).data("id");
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                // Confirmar la eliminación
+                if (confirm("¿Estás seguro de que deseas eliminar esta nota?")) {
+                    // Realizar la petición AJAX para cambiar el estado de la nota
+                    $.ajax({
+                        type: "POST",
+                        url: "../conexion/cambiar_estado_nota.php",
+                        data: {
+                            id: idNota,
+                            estado: 0
+                        },
+                        dataType: "json",
+                        encode: true
+                    }).done(function(data) {
+                        // Recargar la página después de la eliminación exitosa
+                        if (data.status === "success") {
+                            location.reload();
+                        } else {
+                            console.log("Error al cambiar el estado de la nota");
+                        }
+                    }).fail(function(data) {
+                        console.log("Error en la solicitud AJAX");
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -44,7 +44,7 @@ function getCardClass($noteDate)
                             <p class="card-text"><?php echo $row['descripcion']; ?></p>
                             <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
                             <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
-                            <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
+                            <button class="btn btn-primary mx-2"><i class="fa fa-refresh"></i> Restaurar</button>
                             <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
                         </div>
                     </div>
