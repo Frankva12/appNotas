@@ -1,3 +1,17 @@
+<?php
+// Llamado a la clase de conexión
+include("../conexion/conexion.php");
+
+// Crear una instancia de la clase conexión
+$conn = new conexion();
+
+// Establecer consulta de selección a la tabla empleados
+$sql = "SELECT id, nombre, usuario, contrasenia, privilegio FROM dbnotas.usuarios;";
+
+// Ejecutar la consulta SQL
+$res = $conn->MostrarSQL($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,12 +26,13 @@
     <div class="container mt-5">
         <div class="text-center">
             <h1 class="text-center">Lista de Usuarios</h1>
-            <button class="btn btn-primary mt-3">Agregar Usuario</button>
+            <a href="agregar_usuarios.php" class="btn btn-primary mt-3">Agregar Usuario</a>
         </div>
         <div class="table-responsive mt-4">
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>id</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
                         <th>Privilegio</th>
@@ -25,16 +40,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Nombre del Usuario 1</td>
-                        <td>usuario1</td>
-                        <td>Administrador</td>
-                        <td>
-                            <button class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</button>
-                            <button class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
-                        </td>
-                    </tr>
-                    <!-- Repite estas filas para más usuarios -->
+                    <?php foreach ($res as $fila) : ?>
+                        <tr>
+                            <td><?php echo $fila['id']; ?></td>
+                            <td><?php echo $fila['nombre']; ?></td>
+                            <td><?php echo $fila['usuario']; ?></td>
+                            <td><?php echo $fila['privilegio']; ?></td>
+                            <td>
+                                <div class="text-center">
+                                    <button class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</button>
+                                    <button class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
