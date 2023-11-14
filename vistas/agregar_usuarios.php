@@ -4,7 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Libreria de BootStrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("form").submit(function(event) {
+                var usuario = $("#usuario").val();
+                var contrasenia = $("#contrasenia").val();
+                var privilegio = $("#privilegio").val(); // Obtener el valor del combobox
+                var nombre = $("#nombre").val();
+                var formData = {
+                    usuario: usuario,
+                    contrasenia: contrasenia,
+                    privilegio: privilegio,
+                    nombre: nombre,
+                };
+                console.log(formData);
+                $.ajax({
+                    type: "POST",
+                    url: "../conexion/agregar_usuarios.php",
+                    data: formData,
+                    dataType: "json",
+                    encode: true
+                }).done(function(data) {
+                    console.log(data);
+                }).fail(function(data) {
+                    console.log("Error en la solicitud AJAX");
+                });
+            });
+        });
+    </script>
     <title>Agregar Usuario</title>
 </head>
 
@@ -16,32 +47,28 @@
                 <form>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
                     </div>
-                    <div class="form-group">
+                    <div class "form-group">
                         <label for="usuario">Usuario</label>
-                        <input type="text" class="form-control" id="usuario" placeholder="Usuario" required>
+                        <input type="text" class="form-control" id="usuario" name="usuario"  placeholder="Usuario" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Contraseña</label>
-                        <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                        <label for="contrasenia">Contraseña</label>
+                        <input type="password" class="form-control" id="contrasenia" name="contrasenia" placeholder="Contraseña" required>
                     </div>
                     <div class="form-group">
                         <label for="privilegio">Privilegio</label>
-                        <select class="form-control" id="privilegio">
-                            <option value="admin">Administrador</option>
+                        <select class="form-control" id="privilegio" name="privilegio">
+                            <option value="administrador">Administrador</option>
                             <option value="cliente">Cliente</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Agregar Usuario</button>
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Agregar Usuario</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
