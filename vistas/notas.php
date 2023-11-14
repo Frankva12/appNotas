@@ -1,3 +1,22 @@
+<?php
+// Llamado a la clase de conexión
+include("../conexion/conexion.php");
+
+// Crear una instancia de la clase conexión
+$conn = new conexion();
+
+// Establecer consulta de selección a la tabla empleados
+$sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado FROM notas n INNER JOIN usuarios u ON n.id_usuario = u.id INNER JOIN categorias c ON u.id = c.id WHERE estado = 1;";
+
+// Ejecutar la consulta SQL
+$res = $conn->MostrarSQL($sql);
+
+function getCardClass($noteDate)
+{
+    $currentDate = date("Y-m-d");
+    return ($noteDate < $currentDate) ? "bg-warning" : "bg-primary";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,84 +32,30 @@
     <div class="container mt-5">
         <div class="text-center">
             <h1 class="text-center">Mis Notas</h1>
-            <button class="btn btn-primary mt-3">Agregar Nota</button>
+            <a href="agregar_notas.php" <button class="btn btn-primary mt-3">Agregar Nota</button></a>
+            <a href="categorias.php" <button class="btn btn-secondary mt-3">Categorias</button></a>
+            <a href="usuarios.php" <button class="btn btn-info mt-3">Usuarios</button></a>
+            <a href="papelera.php" <button class="btn btn-warning mt-3">Papelera</button></a>
         </div>
         <div class="row mt-4">
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Título de la Nota 1</h5>
-                        <p class="card-text">Descripción de la nota 1</p>
-                        <p class="card-text"><strong>Categoría:</strong> Categoría 1</p>
-                        <p class="card-text"><strong>Fecha:</strong> 11/11/2023</p>
-                        <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                        <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
+            <?php foreach ($res as $row) { ?>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="card <?php echo getCardClass($row['fecha']); ?>">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><?php echo $row['titulo']; ?></h5>
+                            <p class="card-text"><?php echo $row['descripcion']; ?></p>
+                            <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
+                            <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
+                            <button class="btn btn-info mx-2"><i class="fa fa-pencil"></i> Editar</button>
+                            <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Título de la Nota 1</h5>
-                        <p class="card-text">Descripción de la nota 1</p>
-                        <p class="card-text"><strong>Categoría:</strong> Categoría 1</p>
-                        <p class="card-text"><strong>Fecha:</strong> 11/11/2023</p>
-                        <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                        <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Título de la Nota 1</h5>
-                        <p class="card-text">Descripción de la nota 1</p>
-                        <p class="card-text"><strong>Categoría:</strong> Categoría 1</p>
-                        <p class="card-text"><strong>Fecha:</strong> 11/11/2023</p>
-                        <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                        <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Título de la Nota 1</h5>
-                        <p class="card-text">Descripción de la nota 1</p>
-                        <p class="card-text"><strong>Categoría:</strong> Categoría 1</p>
-                        <p class="card-text"><strong>Fecha:</strong> 11/11/2023</p>
-                        <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                        <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Título de la Nota 1</h5>
-                        <p class="card-text">Descripción de la nota 1</p>
-                        <p class="card-text"><strong>Categoría:</strong> Categoría 1</p>
-                        <p class="card-text"><strong>Fecha:</strong> 11/11/2023</p>
-                        <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                        <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Título de la Nota 1</h5>
-                        <p class="card-text">Descripción de la nota 1</p>
-                        <p class="card-text"><strong>Categoría:</strong> Categoría 1</p>
-                        <p class="card-text"><strong>Fecha:</strong> 11/11/2023</p>
-                        <button class="btn btn-primary mx-2"><i class="fa fa-pencil"></i> Editar</button>
-                        <button class="btn btn-danger mx-2"><i class="fa fa-trash"></i> Eliminar</button>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 
+    <!-- ... (script section remains the same) ... -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

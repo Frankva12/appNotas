@@ -1,3 +1,17 @@
+<?php
+// Llamado a la clase de conexión
+include("../conexion/conexion.php");
+
+// Crear una instancia de la clase conexión
+$conn = new conexion();
+
+// Establecer consulta de selección a la tabla empleados
+$sql = "SELECT nombre_categoria FROM dbnotas.categorias;";
+
+// Ejecutar la consulta SQL
+$res = $conn->MostrarSQL($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,17 +26,24 @@
     <div class="container mt-5">
         <div class="text-center">
             <h1 class="text-center">Mis Categorías</h1>
-            <button class="btn btn-primary mt-3">Agregar Categoría</button>
+            <a href="agregar_categorias.php" <button class="btn btn-primary mt-3">Agregar Categorias</button></a>
+            <a href="notas.php" <button class="btn btn-secondary mt-3">Notas</button></a>
         </div>
         <div class="row mt-4">
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card bg-white">
-                    <div class="card-body">
-                        <h5 class="card-title">Nombre de la Categoría 1</h5>
+            <?php foreach ($res as $categoria) : ?>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="card bg-white">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $categoria['nombre_categoria']; ?></h5>
+                            <!-- Update and Delete buttons -->
+                            <div class="text-center mt-3">
+                                <button class="btn btn-warning">Update</button>
+                                <button class="btn btn-danger">Delete</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Repite estos bloques para más categorías -->
+            <?php endforeach; ?>
         </div>
     </div>
 

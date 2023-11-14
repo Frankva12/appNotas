@@ -34,7 +34,10 @@
                         <label for="fecha">Fecha</label>
                         <input type="date" class="form-control" id="fecha" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Agregar Nota</button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Agregar Nota</button>
+                        <a href="notas.php" class="btn btn-secondary btn-block mt-3">Volver</a>
+                    </div>
                 </form>
             </div>
         </div>

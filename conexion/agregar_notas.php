@@ -1,17 +1,19 @@
 <?php
 include("parametros.php");
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $usuario = $_POST["usuario"];
+    $contrasenia = $_POST["contrasenia"];
+    $privilegio = $_POST["privilegio"];
     $nombre = $_POST["nombre"];
-    $precio = $_POST["precio"];
-    $descuento = $_POST["descuento"];
     try {
         $connPDO = new PDO('mysql:host='.server.';dbname='.database, user, password);
         $connPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO bdlaboratorio2.tblproductos (NOMBRE, PRECIO, DESCUENTO) VALUES (:nombre, :precio, :descuento)";
+        $sql = "INSERT INTO dbnotas.usuarios (usuario, contrasenia, privilegio, nombre) VALUES (:usuario, :contrasenia, :privilegio, :nombre)";
         $stmt = $connPDO->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario, PDO::PARAM_STR);
+        $stmt->bindParam(':contrasenia', $contrasenia, PDO::PARAM_STR);
+        $stmt->bindParam(':privilegio', $privilegio, PDO::PARAM_STR);
         $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-        $stmt->bindParam(':precio', $precio, PDO::PARAM_INT);
-        $stmt->bindParam(':descuento', $descuento, PDO::PARAM_INT);
         $stmt->execute();
         $response = array("status" => "success", "message" => "Data inserted successfully");
         echo json_encode($response);

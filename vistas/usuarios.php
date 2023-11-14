@@ -27,6 +27,7 @@ $res = $conn->MostrarSQL($sql);
         <div class="text-center">
             <h1 class="text-center">Lista de Usuarios</h1>
             <a href="agregar_usuarios.php" class="btn btn-primary mt-3">Agregar Usuario</a>
+            <a href="notas.php" <button class="btn btn-secondary mt-3">Notas</button></a>
         </div>
         <div class="table-responsive mt-4">
             <table class="table table-bordered">
