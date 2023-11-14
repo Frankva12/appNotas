@@ -1,4 +1,6 @@
 <?php
+session_start(); // Iniciar sesión
+
 // Llamado a la clase de conexión
 include("../conexion/conexion.php");
 
@@ -32,10 +34,20 @@ function getCardClass($noteDate)
     <div class="container mt-5">
         <div class="text-center">
             <h1 class="text-center">Mis Notas</h1>
-            <a href="agregar_notas.php" <button class="btn btn-primary mt-3">Agregar Nota</button></a>
-            <a href="categorias.php" <button class="btn btn-secondary mt-3">Categorias</button></a>
-            <a href="usuarios.php" <button class="btn btn-info mt-3">Usuarios</button></a>
-            <a href="papelera.php" <button class="btn btn-warning mt-3">Papelera</button></a>
+            <a href="agregar_notas.php" class="btn btn-primary mt-3">Agregar Nota</a>
+            <a href="categorias.php" class="btn btn-secondary mt-3">Categorias</a>
+
+            <?php
+            // Obtener el tipo de usuario desde la sesión
+            $tipoUsuario = isset($_SESSION['usuario_privilegio']) ? $_SESSION['usuario_privilegio'] : '';
+
+            // Mostrar el botón de usuarios solo si el usuario es administrador
+            if ($tipoUsuario === 'administrador') {
+                echo '<a href="usuarios.php" class="btn btn-info mt-3">Usuarios</a>';
+            }
+            ?>
+            <a href="papelera.php" class="btn btn-warning mt-3">Papelera</a>
+            <a href="../conexion/cerrar_session.php" class="btn btn-danger mt-3">Cerrar Sesión</a>
         </div>
         <div class="row mt-4">
             <?php foreach ($res as $row) { ?>
@@ -55,7 +67,6 @@ function getCardClass($noteDate)
         </div>
     </div>
 
-    <!-- ... (script section remains the same) ... -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

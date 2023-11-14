@@ -5,6 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Libreria de BootStrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var usuarioId = <?php echo isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 'null'; ?>;
+        $(document).ready(function() {
+            $("form").submit(function(event) {
+                event.preventDefault(); // Evitar que el formulario se envíe normalmente
+
+                // Obtener los valores de los inputs
+                var titulo = $("#titulo").val();
+                var descripcion = $("#descripcion").val();
+                var categoria = $("#categoria").val();
+                var fecha = $("#fecha").val();
+
+                var formData = {
+                    usuarioId: usuarioId,
+                    titulo: titulo,
+                    descripcion: descripcion,
+                    categoria: categoria,
+                    fecha: fecha
+                };
+
+                console.log(formData);
+                $.ajax({
+                    type: "POST",
+                    url: "../conexion/agregar_notas.php",
+                    data: formData,
+                    dataType: "json",
+                    encode: true
+                }).done(function(data) {
+                    console.log(data);
+                }).fail(function(data) {
+                    console.log("Error en la solicitud AJAX");
+                });
+            });
+        });
+    </script>
+    
     <title>Agregar Nota</title>
 </head>
 
@@ -24,10 +66,18 @@
                     </div>
                     <div class="form-group">
                         <label for="categoria">Categoría</label>
-                        <select class="form-control" id="categoria">
-                            <option value="categoria1">Categoría 1</option>
-                            <option value="categoria2">Categoría 2</option>
-                            <option value="categoria3">Categoría 3</option>
+                        <?php
+                        include("../conexion/conexion.php");
+                        $miConexion = new Conexion();
+                        $query = "SELECT id, nombre_categoria FROM categorias";
+                        $resultado = $miConexion->MostrarSQL($query);
+                        ?>
+                        <select class="form-control" id="categoria" name="categoria">
+                            <?php
+                            while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<option value='" . $fila['id'] . "'>" . $fila['nombre_categoria'] . "</option>";
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -42,10 +92,6 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

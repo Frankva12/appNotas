@@ -19,6 +19,7 @@ $res = $conn->MostrarSQL($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Categorías</title>
 </head>
 
@@ -37,8 +38,8 @@ $res = $conn->MostrarSQL($sql);
                             <h5 class="card-title"><?php echo $categoria['nombre_categoria']; ?></h5>
                             <!-- Update and Delete buttons -->
                             <div class="text-center mt-3">
-                                <button class="btn btn-warning">Update</button>
-                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-warning"><i class="fa fa-pencil"></i> Editar</button>
+                                <button class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
                             </div>
                         </div>
                     </div>
