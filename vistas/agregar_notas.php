@@ -40,6 +40,7 @@
                     encode: true
                 }).done(function(data) {
                     console.log(data);
+                    location.reload();
                 }).fail(function(data) {
                     console.log("Error en la solicitud AJAX");
                 });

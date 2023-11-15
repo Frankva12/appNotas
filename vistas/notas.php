@@ -7,6 +7,9 @@ include("../conexion/conexion.php");
 // Crear una instancia de la clase conexión
 $conn = new conexion();
 
+// Obtener el ID del usuario en sesión
+$idUsuario = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
+
 // Establecer consulta de selección a la tabla empleados
 $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado FROM notas n INNER JOIN usuarios u ON n.id_usuario = u.id INNER JOIN categorias c ON u.id = c.id WHERE estado = 1;";
 
