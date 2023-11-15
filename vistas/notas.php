@@ -14,8 +14,8 @@ $idUsuario = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado 
         FROM notas n 
         INNER JOIN usuarios u ON n.id_usuario = u.id 
-        INNER JOIN categorias c ON u.id = c.id 
-        WHERE estado = 1 AND n.id_usuario = :idUsuario;";
+        INNER JOIN categorias c ON n.categoria_id = c.id 
+        WHERE n.estado = 1 AND n.id_usuario = :idUsuario;";
 
 // Preparar la consulta SQL
 $stmt = $conn->pdo()->prepare($sql);
