@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-    <!-- Librería de Bootstrap -->
+
+    <!-- Bootstrap library -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -14,13 +14,25 @@
         var usuarioId = <?php echo isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 'null'; ?>;
         $(document).ready(function() {
             $("form").submit(function(event) {
-                event.preventDefault(); // Evitar que el formulario se envíe normalmente
+                event.preventDefault(); // Prevent the standard form submission
 
-                // Obtener los valores de los inputs
+                // Get the values from the inputs
                 var titulo = $("#titulo").val();
                 var descripcion = $("#descripcion").val();
                 var categoria = $("#categoria").val();
                 var fecha = $("#fecha").val();
+
+                // Validate the title length
+                if (titulo.length > 100) {
+                    mostrarMensaje("danger", "Error: El título no puede tener más de 100 caracteres.");
+                    return;
+                }
+
+                // Validate the description length
+                if (descripcion.length > 500) {
+                    mostrarMensaje("danger", "Error: La descripción no puede tener más de 500 caracteres.");
+                    return;
+                }
 
                 var formData = {
                     usuarioId: usuarioId,
@@ -40,26 +52,26 @@
                 }).done(function(data) {
                     console.log(data);
                     if (data.status === "success") {
-                        // Mostrar mensaje de éxito
+                        // Show success message
                         mostrarMensaje("success", "¡Nota agregada correctamente!");
-                        // Limpiar el formulario después del éxito (opcional)
+                        // Clear the form after success (optional)
                         $("form")[0].reset();
                     } else {
-                        // Mostrar mensaje de error
+                        // Show error message
                         mostrarMensaje("danger", "Error al agregar nota. Por favor, intenta nuevamente.");
                     }
                 }).fail(function(data) {
                     console.log("Error en la solicitud AJAX");
-                    // Mostrar mensaje de error
+                    // Show error message
                     mostrarMensaje("danger", "Error en la solicitud AJAX. Por favor, intenta nuevamente.");
                 });
             });
 
-            // Función para mostrar mensajes
+            // Function to display messages
             function mostrarMensaje(tipo, mensaje) {
-                // Limpiar mensajes anteriores
+                // Clear previous messages
                 $("#mensaje").empty();
-                // Agregar el nuevo mensaje
+                // Add the new message
                 $("#mensaje").append('<div class="alert alert-' + tipo + ' alert-dismissible fade show" role="alert">' +
                     mensaje +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
@@ -67,7 +79,7 @@
             }
         });
     </script>
-    
+
     <title>Agregar Nota</title>
 </head>
 

@@ -62,13 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <form method="post">
                             <div class="form-group">
                                 <label for="username">Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required maxlength="40">
-                                <div class="invalid-feedback">Usuario inválido. Debe tener entre 1 y 40 caracteres.</div>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required maxlength="30" pattern="^[a-zA-Z0-9]{1,40}$">
+                                <div class="invalid-feedback">Usuario inválido. Debe contener solo letras y números, y tener entre 1 y 40 caracteres.</div>
                             </div>
                             <div class="form-group">
                                 <label for="password">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required minlength="3" maxlength="40">
-                                <div class="invalid-feedback">Contraseña inválida. Debe tener entre 3 y 40 caracteres.</div>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required minlength="3" maxlength="40" pattern="^[a-zA-Z0-9]{3,40}$">
+                                <div class="invalid-feedback">Contraseña inválida. Debe contener solo letras y números, y tener entre 3 y 40 caracteres.</div>
                             </div>
                             <?php
                             if (isset($mensaje_error)) {

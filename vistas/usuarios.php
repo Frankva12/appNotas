@@ -39,6 +39,9 @@ $res = $conn->MostrarSQL($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -104,24 +107,25 @@ $res = $conn->MostrarSQL($sql);
                     <form id="formularioEditarUsuario">
                         <div class="form-group">
                             <label for="nombreUsuario">Nombre:</label>
-                            <input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario" required>
+                            <input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario" pattern="^[a-zA-Z0-9]{3,80}$" required>
                         </div>
                         <div class="form-group">
                             <label for="usuarioUsuario">Usuario:</label>
-                            <input type="text" class="form-control" id="usuarioUsuario" name="usuarioUsuario" required>
+                            <input type="text" class="form-control" id="usuarioUsuario" name="usuarioUsuario" placeholder="Usuario" pattern="^[a-zA-Z0-9]{3,80}$" title="Solo se permiten letras y números (sin espacios ni caracteres especiales)" required>
                         </div>
                         <div class="form-group">
-                            <label for="contrasenia">Contraseña:</label>
-                            <input type="password" class="form-control" id="usuarioContrasenia" name="contrasenia" required>
+                            <label for="usuarioContrasenia">Contraseña:</label>
+                            <input type="password" class="form-control" id="usuarioContrasenia" name="usuarioContrasenia" required>
                         </div>
                         <div class="form-group">
                             <label for="privilegioUsuario">Privilegio</label>
-                            <select class="form-control mb-3" id="privilegioUsuario" name="privilegioUsuario">
+                            <select class="form-control mb-3" id="privilegioUsuario" name="privilegioUsuario" required>
                                 <option value="administrador">Administrador</option>
                                 <option value="cliente">Cliente</option>
                             </select>
-                            <input type="hidden" id="idUsuarioEditar" name="idUsuarioEditar">
-                            <button type="button" class="btn btn-primary" onclick="editarUsuario()">Guardar cambios</button>
+                        </div>
+                        <input type="hidden" id="idUsuarioEditar" name="idUsuarioEditar">
+                        <button type="button" class="btn btn-primary" onclick="editarUsuario()">Guardar cambios</button>
                     </form>
                 </div>
             </div>
@@ -152,6 +156,22 @@ $res = $conn->MostrarSQL($sql);
             var nuevoUsuario = $('#usuarioUsuario').val();
             var nuevaContrasenia = $('#usuarioContrasenia').val();
             var nuevoPrivilegio = $('#privilegioUsuario').val();
+
+            // Validar campos
+            if (nuevoNombre.length === 0 || nuevoNombre.length > 120) {
+                alert('Error: El nombre debe tener entre 1 y 120 caracteres.');
+                return;
+            }
+
+            if (nuevoUsuario.length === 0 || nuevoUsuario.length > 50 || !/^[a-zA-Z0-9]+$/.test(nuevoUsuario)) {
+                alert('Error: El usuario debe tener entre 1 y 50 caracteres y solo se permiten letras y números.');
+                return;
+            }
+
+            if (nuevaContrasenia.length === 0 || nuevaContrasenia.length > 50) {
+                alert('Error: La contraseña debe tener entre 1 y 50 caracteres.');
+                return;
+            }
 
             // Realizar la solicitud AJAX para editar el usuario
             $.ajax({

@@ -131,11 +131,11 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                     <form id="formularioEditarNota">
                         <div class="form-group">
                             <label for="tituloNota">Título:</label>
-                            <input type="text" class="form-control" id="tituloNota" name="tituloNota" required>
+                            <input type="text" class="form-control" id="tituloNota" name="tituloNota" required maxlength="100">
                         </div>
                         <div class="form-group">
                             <label for="descripcionNota">Descripción:</label>
-                            <textarea class="form-control" id="descripcionNota" name="descripcionNota" rows="3" required></textarea>
+                            <textarea class="form-control" id="descripcionNota" name="descripcionNota" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="categoriaNota">Categoría:</label>
@@ -159,8 +159,8 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
-        $(document).ready(function() {
-            $(".btn-info").click(function() {
+        $(document).ready(function () {
+            $(".btn-info").click(function () {
                 var idNota = $(this).data("id");
                 var titulo = $(this).data("titulo");
                 var descripcion = $(this).data("descripcion");
@@ -176,7 +176,7 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
             });
 
             // Al hacer clic en el botón de eliminar
-            $(".eliminar-nota").click(function() {
+            $(".eliminar-nota").click(function () {
                 var idNota = $(this).data("id");
 
                 // Confirmar la eliminación
@@ -191,7 +191,7 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                         },
                         dataType: "json",
                         encode: true
-                    }).done(function(data) {
+                    }).done(function (data) {
                         // Recargar la página después de la eliminación exitosa
                         if (data.status === "success") {
                             // Redirigir a la página de notas con un mensaje de éxito
@@ -199,7 +199,7 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                         } else {
                             console.log("Error al cambiar el estado de la nota");
                         }
-                    }).fail(function(data) {
+                    }).fail(function (data) {
                         console.log("Error en la solicitud AJAX");
                     });
                 }
@@ -214,6 +214,16 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
             var nuevaCategoria = $("#categoriaNota").val();
             var nuevaFecha = $("#fechaNota").val();
 
+            // Validar campos
+            if (nuevoTitulo.length === 0 || nuevoTitulo.length > 100) {
+                alert('Error: El título debe tener entre 1 y 100 caracteres.');
+                return;
+            }
+
+            // Convertir la fecha al formato de MySQL (YYYY-MM-DD)
+            var parts = nuevaFecha.split("/");
+            nuevaFecha = parts[2] + "-" + parts[1] + "-" + parts[0];
+
             // Realizar la solicitud AJAX para editar la nota
             $.ajax({
                 url: '../conexion/editar_nota.php', // Reemplaza con el nombre de tu archivo de edición de nota
@@ -225,7 +235,7 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                     nuevaCategoria: nuevaCategoria,
                     nuevaFecha: nuevaFecha
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response === 'success') {
                         // Redirigir a la página de notas con un mensaje de éxito
                         window.location.href = 'notas.php?mensaje=success_update';

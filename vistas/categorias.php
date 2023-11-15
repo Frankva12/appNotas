@@ -174,7 +174,7 @@ $res = $conn->MostrarSQL($sql);
                     <form id="formularioEditarCategoria" method="post" action="">
                         <div class="form-group">
                             <label for="nombreCategoria">Nombre de la categoría:</label>
-                            <input type="text" class="form-control" id="nombreCategoria" name="nombreCategoria" required>
+                            <input type="text" class="form-control" id="nombreCategoria" name="nombreCategoria" required maxlength="80">
                         </div>
                         <input type="hidden" id="idCategoriaEditar" name="idCategoriaEditar">
                         <button type="submit" class="btn btn-primary" onclick="editarCategoria()">Guardar cambios</button>
@@ -190,6 +190,20 @@ $res = $conn->MostrarSQL($sql);
             $('#idCategoriaEditar').val(id);
             $('#nombreCategoria').val(nombre);
             $('#editarCategoriaModal').modal('show');
+        }
+
+        // Función para validar la longitud del nombre de la categoría
+        function editarCategoria() {
+            var nuevoNombre = $('#nombreCategoria').val();
+
+            if (nuevoNombre.length > 80) {
+                alert("Error: El nombre de la categoría no puede tener más de 80 caracteres.");
+                return false;
+            }
+
+            // Puedes realizar otras validaciones si es necesario
+
+            return true;
         }
     </script>
 </body>
