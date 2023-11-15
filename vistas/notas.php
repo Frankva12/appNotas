@@ -150,16 +150,9 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                 var categoria = $(this).data("categoria-nota");
                 var fecha = $(this).data("fecha");
 
-                // Verificar si la categoría está definida antes de asignarla
-                categoria = (categoria !== undefined) ? categoria : '';
-
                 $("#idNotaEditar").val(idNota);
                 $("#tituloNota").val(titulo);
                 $("#descripcionNota").val(descripcion);
-
-                // Set the selected category in the dropdown
-                $("#categoriaNota").val(categoria);
-
                 $("#fechaNota").val(fecha);
 
                 $("#editarNotaModal").modal("show");
