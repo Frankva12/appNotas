@@ -1,4 +1,6 @@
 <?php
+session_start(); 
+
 // Llamado a la clase de conexión
 include("../conexion/conexion.php");
 
@@ -50,7 +52,11 @@ $res = $conn->MostrarSQL($sql);
                             <td>
                                 <div class="text-center">
                                     <button class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</button>
-                                    <button class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                                    <?php if ($fila['id'] != $_SESSION['usuario_id']) : ?>
+                                        <a href="../conexion/eliminar_usuario.php?id=<?php echo $fila['id']; ?>" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar a este usuario?');">
+                                            <i class="fa fa-trash"></i> Eliminar
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
