@@ -10,6 +10,24 @@ $conn = new conexion();
 // Obtener el ID del usuario en sesión
 $idUsuario = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 
+// Verificar si hay un mensaje en el URL y mostrarlo
+$mensaje = isset($_GET['mensaje']) ? $_GET['mensaje'] : '';
+if ($mensaje === 'success_restore') {
+    echo '<div id="restore-message" class="alert alert-success">La nota se ha restaurado exitosamente.</div>';
+    echo '<script>
+            setTimeout(function() {
+                $("#restore-message").fadeOut("slow");
+            }, 3000);
+          </script>';
+} elseif ($mensaje === 'success_permanent_delete') {
+    echo '<div id="permanent-delete-message" class="alert alert-danger">La nota se ha eliminado permanentemente.</div>';
+    echo '<script>
+            setTimeout(function() {
+                $("#permanent-delete-message").fadeOut("slow");
+            }, 3000);
+          </script>';
+}
+
 // Establecer consulta de selección a la tabla notas eliminadas del usuario
 $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado 
         FROM notas n 
@@ -63,7 +81,8 @@ function getCardClass($noteDate)
                 }).done(function(data) {
                     // Recargar la página después de restaurar la nota
                     if (data.status === "success") {
-                        location.reload();
+                        // Redirigir a la página de notas eliminadas con un mensaje de éxito
+                        window.location.href = 'papelera.php?mensaje=success_restore';
                     } else {
                         console.log("Error al restaurar la nota");
                     }
@@ -87,7 +106,8 @@ function getCardClass($noteDate)
                 }).done(function(data) {
                     // Recargar la página después de eliminar permanentemente la nota
                     if (data.status === "success") {
-                        location.reload();
+                        // Redirigir a la página de notas eliminadas con un mensaje de éxito
+                        window.location.href = 'papelera.php?mensaje=success_permanent_delete';
                     } else {
                         console.log("Error al eliminar permanentemente la nota");
                     }

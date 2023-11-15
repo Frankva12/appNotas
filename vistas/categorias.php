@@ -3,7 +3,11 @@
 include("../conexion/conexion.php");
 
 // Crear una instancia de la clase conexión
-$conn = new conexion();
+$conn = new Conexion();
+
+// Mensajes
+$mensaje_actualizar = "";
+$mensaje_eliminar = "";
 
 // Verificar si se ha enviado un ID de categoría para eliminar
 if (isset($_GET['eliminar'])) {
@@ -35,16 +39,19 @@ if (isset($_GET['confirmar_eliminar'])) {
         // Ejecutar la consulta
         $stmtEliminar->execute();
 
+        // Mensaje de éxito al eliminar
+        $mensaje_eliminar = "Categoría eliminada correctamente.";
+
         // Redireccionar a la página de categorías después de eliminar
         header("Location: categorias.php");
         exit();
     } catch (PDOException $ex) {
         // Manejar la excepción de restricción de clave externa
         if ($ex->getCode() == '23000') {
-            echo '<script>alert("No se puede eliminar la categoría porque pertenece a una nota.");</script>';
+            $mensaje_eliminar = "No se puede eliminar la categoría porque pertenece a una nota.";
         } else {
             // Otra excepción, mostrar el mensaje de error
-            echo "Error: " . $ex->getMessage();
+            $mensaje_eliminar = "Error: " . $ex->getMessage();
         }
     }
 }
@@ -59,6 +66,31 @@ function obtenerNombreCategoria($idCategoria, $conn)
     $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $resultado['nombre_categoria'];
+}
+
+// Verificar si se ha enviado un formulario de actualización
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['idCategoriaEditar'])) {
+    $idCategoriaEditar = $_POST['idCategoriaEditar'];
+    $nuevoNombreCategoria = $_POST['nombreCategoria'];
+
+    try {
+        // Preparar la consulta SQL para actualizar la categoría
+        $sqlActualizarCategoria = "UPDATE categorias SET nombre_categoria = :nuevoNombre WHERE id = :idCategoria";
+
+        // Preparar la consulta
+        $stmtActualizar = $conn->pdo()->prepare($sqlActualizarCategoria);
+        $stmtActualizar->bindParam(':nuevoNombre', $nuevoNombreCategoria, PDO::PARAM_STR);
+        $stmtActualizar->bindParam(':idCategoria', $idCategoriaEditar, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $stmtActualizar->execute();
+
+        // Mensaje de éxito al actualizar
+        $mensaje_actualizar = "Categoría actualizada correctamente.";
+    } catch (PDOException $ex) {
+        // Otra excepción, mostrar el mensaje de error
+        $mensaje_actualizar = "Error al actualizar la categoría: " . $ex->getMessage();
+    }
 }
 
 // Establecer consulta de selección a la tabla categorías
@@ -90,6 +122,26 @@ $res = $conn->MostrarSQL($sql);
             <a href="agregar_categorias.php" class="btn btn-primary mt-3">Agregar Categorías</a>
             <a href="notas.php" class="btn btn-secondary mt-3">Notas</a>
         </div>
+        <!-- Mensaje de actualización -->
+        <?php if ($mensaje_actualizar) : ?>
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <?php echo $mensaje_actualizar; ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+
+        <!-- Mensaje de eliminación -->
+        <?php if ($mensaje_eliminar) : ?>
+            <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                <?php echo $mensaje_eliminar; ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+
         <div class="row mt-4">
             <?php foreach ($res as $categoria) : ?>
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
@@ -119,19 +171,18 @@ $res = $conn->MostrarSQL($sql);
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formularioEditarCategoria">
+                    <form id="formularioEditarCategoria" method="post" action="">
                         <div class="form-group">
                             <label for="nombreCategoria">Nombre de la categoría:</label>
                             <input type="text" class="form-control" id="nombreCategoria" name="nombreCategoria" required>
                         </div>
                         <input type="hidden" id="idCategoriaEditar" name="idCategoriaEditar">
-                        <button type="button" class="btn btn-primary" onclick="editarCategoria()">Guardar cambios</button>
+                        <button type="submit" class="btn btn-primary" onclick="editarCategoria()">Guardar cambios</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
 
     <script>
         // Función para abrir el modal de edición
@@ -139,29 +190,6 @@ $res = $conn->MostrarSQL($sql);
             $('#idCategoriaEditar').val(id);
             $('#nombreCategoria').val(nombre);
             $('#editarCategoriaModal').modal('show');
-        }
-
-        // Función para enviar la solicitud de edición
-        function editarCategoria() {
-            var id = $('#idCategoriaEditar').val();
-            var nuevoNombre = $('#nombreCategoria').val();
-
-            // Realizar la solicitud AJAX para editar la categoría
-            $.ajax({
-                url: '../conexion/editar_categoria.php', // Reemplaza con el nombre de tu archivo de edición
-                type: 'POST',
-                data: {
-                    id: id,
-                    nuevoNombre: nuevoNombre
-                },
-                success: function(response) {
-                    if (response === 'success') {
-                        location.reload();
-                    } else {
-                        alert('Error al editar la categoría.');
-                    }
-                }
-            });
         }
     </script>
 </body>

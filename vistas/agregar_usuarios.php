@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Libreria de BootStrap -->
+    <!-- Libreria de Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             $("form").submit(function(event) {
+                event.preventDefault(); // Evitar el envío del formulario estándar
                 var usuario = $("#usuario").val();
                 var contrasenia = $("#contrasenia").val();
                 var privilegio = $("#privilegio").val(); // Obtener el valor del combobox
@@ -31,11 +31,32 @@
                     encode: true
                 }).done(function(data) {
                     console.log(data);
-                    location.reload();
+                    if (data.status === "success") {
+                        // Mostrar mensaje de éxito
+                        mostrarMensaje("success", "¡Usuario agregado correctamente!");
+                        // Limpiar el formulario después del éxito (opcional)
+                        $("form")[0].reset();
+                    } else {
+                        // Mostrar mensaje de error
+                        mostrarMensaje("danger", "Error al agregar usuario. Por favor, intenta nuevamente.");
+                    }
                 }).fail(function(data) {
                     console.log("Error en la solicitud AJAX");
+                    // Mostrar mensaje de error
+                    mostrarMensaje("danger", "Error en la solicitud AJAX. Por favor, intenta nuevamente.");
                 });
             });
+
+            // Función para mostrar mensajes
+            function mostrarMensaje(tipo, mensaje) {
+                // Limpiar mensajes anteriores
+                $("#mensaje").empty();
+                // Agregar el nuevo mensaje
+                $("#mensaje").append('<div class="alert alert-' + tipo + ' alert-dismissible fade show" role="alert">' +
+                    mensaje +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                    '</div>');
+            }
         });
     </script>
     <title>Agregar Usuario</title>
@@ -46,6 +67,7 @@
         <h1 class="text-center">Agregar Usuario</h1>
         <div class="row">
             <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-12">
+                <div id="mensaje"></div> <!-- Elemento para mostrar mensajes -->
                 <form>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>

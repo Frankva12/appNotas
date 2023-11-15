@@ -2,8 +2,8 @@
 session_start(); // Iniciar sesión
 
 // Verificar si el usuario ya está autenticado
-if(isset($_SESSION['usuario_id'])){
-    header("Location: login.php"); // Redirigir a la página de inicio si ya está autenticado
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: notas.php"); // Redirigir a la página de inicio si ya está autenticado
     exit();
 }
 
@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['usuario_nombre'] = $usuario_info['usuario'];
         $_SESSION['usuario_privilegio'] = $usuario_info['privilegio'];
 
-        // Redirigir a la página de inicio
-        header("Location: notas.php");
+        // Redirigir a la página de inicio con un mensaje de éxito
+        header("Location: notas.php?mensaje=success_login");
         exit();
     } else {
         $mensaje_error = "Credenciales incorrectas. Por favor, intenta de nuevo.";
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="invalid-feedback">Contraseña inválida. Debe tener entre 3 y 40 caracteres.</div>
                             </div>
                             <?php
-                            if(isset($mensaje_error)){
+                            if (isset($mensaje_error)) {
                                 echo "<div class='alert alert-danger'>$mensaje_error</div>";
                             }
                             ?>

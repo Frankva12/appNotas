@@ -10,6 +10,24 @@ $conn = new conexion();
 // Obtener el ID del usuario en sesión
 $idUsuario = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 
+// Verificar si hay un mensaje en el URL y mostrarlo
+$mensaje = isset($_GET['mensaje']) ? $_GET['mensaje'] : '';
+if ($mensaje === 'success_update') {
+    echo '<div id="success-message" class="alert alert-success">La nota se ha actualizado exitosamente.</div>';
+    echo '<script>
+            setTimeout(function() {
+                $("#success-message").fadeOut("slow");
+            }, 3000);
+          </script>';
+} elseif ($mensaje === 'success_delete') {
+    echo '<div id="delete-message" class="alert alert-danger">La nota se ha eliminado correctamente.</div>';
+    echo '<script>
+            setTimeout(function() {
+                $("#delete-message").fadeOut("slow");
+            }, 3000);
+          </script>';
+}
+
 // Establecer consulta de selección a la tabla notas
 $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado 
         FROM notas n 
@@ -88,7 +106,6 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                             <button class="btn btn-info mx-2" data-toggle="modal" data-target="#editarNotaModal" data-id="<?php echo $row['id']; ?>" data-titulo="<?php echo $row['titulo']; ?>" data-descripcion="<?php echo $row['descripcion']; ?>" data-categoria-nota="<?php echo $row['id']; ?>" data-categoria-nombre="<?php echo $row['nombre_categoria']; ?>" data-fecha="<?php echo $row['fecha']; ?>">
                                 <i class="fa fa-pencil"></i> Editar
                             </button>
-
 
                             <button class="btn btn-danger mx-2 eliminar-nota" data-id="<?php echo $row['id']; ?>">
                                 <i class="fa fa-trash"></i> Eliminar
@@ -177,7 +194,8 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                     }).done(function(data) {
                         // Recargar la página después de la eliminación exitosa
                         if (data.status === "success") {
-                            location.reload();
+                            // Redirigir a la página de notas con un mensaje de éxito
+                            window.location.href = 'notas.php?mensaje=success_delete';
                         } else {
                             console.log("Error al cambiar el estado de la nota");
                         }
@@ -209,8 +227,8 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
                 },
                 success: function(response) {
                     if (response === 'success') {
-                        // Recargar la página después de editar
-                        location.reload();
+                        // Redirigir a la página de notas con un mensaje de éxito
+                        window.location.href = 'notas.php?mensaje=success_update';
                     } else {
                         alert('Error al editar la nota.');
                     }

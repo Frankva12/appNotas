@@ -7,6 +7,24 @@ include("../conexion/conexion.php");
 // Crear una instancia de la clase conexión
 $conn = new conexion();
 
+// Verificar si hay un mensaje en el URL y mostrarlo
+$mensaje = isset($_GET['mensaje']) ? $_GET['mensaje'] : '';
+if ($mensaje === 'success_update') {
+    echo '<div id="update-message" class="alert alert-success">El usuario se ha actualizado exitosamente.</div>';
+    echo '<script>
+            setTimeout(function() {
+                $("#update-message").fadeOut("slow");
+            }, 3000);
+          </script>';
+} elseif ($mensaje === 'success_delete') {
+    echo '<div id="delete-message" class="alert alert-success">El usuario se ha eliminado exitosamente.</div>';
+    echo '<script>
+            setTimeout(function() {
+                $("#delete-message").fadeOut("slow");
+            }, 3000);
+          </script>';
+}
+
 // Establecer consulta de selección a la tabla empleados
 $sql = "SELECT id, nombre, usuario, contrasenia, privilegio FROM dbnotas.usuarios;";
 
@@ -59,7 +77,7 @@ $res = $conn->MostrarSQL($sql);
                                     </button>
 
                                     <?php if ($fila['id'] != $_SESSION['usuario_id']) : ?>
-                                        <a href="../conexion/eliminar_usuario.php?id=<?php echo $fila['id']; ?>" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar a este usuario?');">
+                                        <a href="../conexion/eliminar_usuario.php?id=<?php echo $fila['id']; ?>&mensaje=success_delete" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar a este usuario?');">
                                             <i class="fa fa-trash"></i> Eliminar
                                         </a>
                                     <?php endif; ?>
@@ -149,7 +167,7 @@ $res = $conn->MostrarSQL($sql);
                 success: function(response) {
                     if (response === 'success') {
                         // Recargar la página después de editar
-                        location.reload();
+                        location.href = 'usuarios.php?mensaje=success_update';
                     } else {
                         alert('Error al editar el usuario.');
                     }
