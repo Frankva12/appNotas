@@ -33,7 +33,7 @@ $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.f
         FROM notas n 
         INNER JOIN usuarios u ON n.id_usuario = u.id 
         INNER JOIN categorias c ON n.categoria_id = c.id 
-        WHERE n.estado =0 AND n.id_usuario = :idUsuario;";
+        WHERE n.estado = 0 AND n.id_usuario = :idUsuario;";
 
 // Preparar la consulta SQL
 $stmt = $conn->pdo()->prepare($sql);
@@ -46,7 +46,6 @@ $stmt->execute();
 
 // Obtener los resultados
 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 function getCardClass($noteDate)
 {
@@ -77,20 +76,28 @@ function getCardClass($noteDate)
             <a href="notas.php" class="btn btn-secondary mt-3">Notas</a>
         </div>
         <div class="row mt-4">
-            <?php foreach ($res as $row) { ?>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card <?php echo getCardClass($row['fecha']); ?>">
-                        <div class="card-body text-center">
-                            <h5 class="card-title"><?php echo $row['titulo']; ?></h5>
-                            <p class="card-text"><?php echo $row['descripcion']; ?></p>
-                            <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
-                            <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
-                            <button class="btn btn-primary mx-2" onclick="restaurarNota(<?php echo $row['id']; ?>)"><i class="fa fa-refresh"></i> Restaurar</button>
-                            <button class="btn btn-danger mx-2" onclick="eliminarNota(<?php echo $row['id']; ?>)"><i class="fa fa-trash"></i> Eliminar</button>
-                        </div>
+            <?php if (empty($res)) : ?>
+                <div class="col-12">
+                    <div class="alert alert-info" role="alert">
+                        No hay notas en la papelera.
                     </div>
                 </div>
-            <?php } ?>
+            <?php else : ?>
+                <?php foreach ($res as $row) { ?>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card <?php echo getCardClass($row['fecha']); ?>">
+                            <div class="card-body text-center">
+                                <h5 class="card-title"><?php echo $row['titulo']; ?></h5>
+                                <p class="card-text"><?php echo $row['descripcion']; ?></p>
+                                <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
+                                <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
+                                <button class="btn btn-primary mx-2" onclick="restaurarNota(<?php echo $row['id']; ?>)"><i class="fa fa-refresh"></i> Restaurar</button>
+                                <button class="btn btn-danger mx-2" onclick="eliminarNota(<?php echo $row['id']; ?>)"><i class="fa fa-trash"></i> Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            <?php endif; ?>
         </div>
     </div>
 </body>

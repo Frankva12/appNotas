@@ -68,31 +68,6 @@ function obtenerNombreCategoria($idCategoria, $conn)
     return $resultado['nombre_categoria'];
 }
 
-// Verificar si se ha enviado un formulario de actualización
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['idCategoriaEditar'])) {
-    $idCategoriaEditar = $_POST['idCategoriaEditar'];
-    $nuevoNombreCategoria = $_POST['nombreCategoria'];
-
-    try {
-        // Preparar la consulta SQL para actualizar la categoría
-        $sqlActualizarCategoria = "UPDATE categorias SET nombre_categoria = :nuevoNombre WHERE id = :idCategoria";
-
-        // Preparar la consulta
-        $stmtActualizar = $conn->pdo()->prepare($sqlActualizarCategoria);
-        $stmtActualizar->bindParam(':nuevoNombre', $nuevoNombreCategoria, PDO::PARAM_STR);
-        $stmtActualizar->bindParam(':idCategoria', $idCategoriaEditar, PDO::PARAM_INT);
-
-        // Ejecutar la consulta
-        $stmtActualizar->execute();
-
-        // Mensaje de éxito al actualizar
-        $mensaje_actualizar = "Categoría actualizada correctamente.";
-    } catch (PDOException $ex) {
-        // Otra excepción, mostrar el mensaje de error
-        $mensaje_actualizar = "Error al actualizar la categoría: " . $ex->getMessage();
-    }
-}
-
 // Establecer consulta de selección a la tabla categorías
 $sql = "SELECT id, nombre_categoria FROM categorias;";
 
@@ -143,20 +118,28 @@ $res = $conn->MostrarSQL($sql);
         <?php endif; ?>
 
         <div class="row mt-4">
-            <?php foreach ($res as $categoria) : ?>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-white">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $categoria['nombre_categoria']; ?></h5>
-                            <!-- Update and Delete buttons -->
-                            <div class="text-center mt-3">
-                                <a href="?eliminar=<?php echo $categoria['id']; ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</a>
-                                <button class="btn btn-warning" onclick="abrirModalEditar(<?php echo $categoria['id']; ?>, '<?php echo $categoria['nombre_categoria']; ?>')"><i class="fa fa-pencil"></i> Editar</button>
+            <?php if (empty($res)) : ?>
+                <div class="col-12">
+                    <div class="alert alert-info" role="alert">
+                        No hay categorías disponibles.
+                    </div>
+                </div>
+            <?php else : ?>
+                <?php foreach ($res as $categoria) : ?>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card bg-white">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo $categoria['nombre_categoria']; ?></h5>
+                                <!-- Update and Delete buttons -->
+                                <div class="text-center mt-3">
+                                    <a href="?eliminar=<?php echo $categoria['id']; ?>" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</a>
+                                    <button class="btn btn-warning" onclick="abrirModalEditar(<?php echo $categoria['id']; ?>, '<?php echo $categoria['nombre_categoria']; ?>')"><i class="fa fa-pencil"></i> Editar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 

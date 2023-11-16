@@ -94,27 +94,34 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
             <a href="papelera.php" class="btn btn-warning mt-3">Papelera</a>
             <a href="../modelo/cerrar_session.php" class="btn btn-danger mt-3">Cerrar Sesión</a>
         </div>
-        <div class="row mt-4">
-            <?php foreach ($res as $row) { ?>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card <?php echo getCardClass($row['fecha']); ?>">
-                        <div class="card-body text-center">
-                            <h5 class="card-title"><?php echo $row['titulo']; ?></h5>
-                            <p class="card-text"><?php echo $row['descripcion']; ?></p>
-                            <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
-                            <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
-                            <button class="btn btn-info mx-2" data-toggle="modal" data-target="#editarNotaModal" data-id="<?php echo $row['id']; ?>" data-titulo="<?php echo $row['titulo']; ?>" data-descripcion="<?php echo $row['descripcion']; ?>" data-categoria-nota="<?php echo $row['id']; ?>" data-categoria-nombre="<?php echo $row['nombre_categoria']; ?>" data-fecha="<?php echo $row['fecha']; ?>">
-                                <i class="fa fa-pencil"></i> Editar
-                            </button>
+        
+        <?php if (empty($res)) : ?>
+            <div class="alert alert-info mt-3" role="alert">
+                No hay notas para este usuario.
+            </div>
+        <?php else : ?>
+            <div class="row mt-4">
+                <?php foreach ($res as $row) { ?>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card <?php echo getCardClass($row['fecha']); ?>">
+                            <div class="card-body text-center">
+                                <h5 class="card-title"><?php echo $row['titulo']; ?></h5>
+                                <p class="card-text"><?php echo $row['descripcion']; ?></p>
+                                <p class="card-text"><strong>Categoría:</strong> <?php echo $row['nombre_categoria']; ?></p>
+                                <p class="card-text"><strong>Fecha:</strong> <?php echo $row['fecha']; ?></p>
+                                <button class="btn btn-info mx-2" data-toggle="modal" data-target="#editarNotaModal" data-id="<?php echo $row['id']; ?>" data-titulo="<?php echo $row['titulo']; ?>" data-descripcion="<?php echo $row['descripcion']; ?>" data-categoria-nota="<?php echo $row['id']; ?>" data-categoria-nombre="<?php echo $row['nombre_categoria']; ?>" data-fecha="<?php echo $row['fecha']; ?>">
+                                    <i class="fa fa-pencil"></i> Editar
+                                </button>
 
-                            <button class="btn btn-danger mx-2 eliminar-nota" data-id="<?php echo $row['id']; ?>">
-                                <i class="fa fa-trash"></i> Eliminar
-                            </button>
+                                <button class="btn btn-danger mx-2 eliminar-nota" data-id="<?php echo $row['id']; ?>">
+                                    <i class="fa fa-trash"></i> Eliminar
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
-        </div>
+                <?php } ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <!-- Modal para editar nota -->
