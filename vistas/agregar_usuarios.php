@@ -8,76 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("form").submit(function(event) {
-                event.preventDefault(); // Prevent the standard form submission
-                var usuario = $("#usuario").val();
-                var contrasenia = $("#contrasenia").val();
-                var privilegio = $("#privilegio").val(); // Get the value from the combobox
-                var nombre = $("#nombre").val();
-
-                // Validate Nombre (Name)
-                if (nombre.length > 80) {
-                    mostrarMensaje("danger", "Error: El nombre no puede tener más de 80 caracteres.");
-                    return;
-                }
-
-                // Validate Usuario (Username)
-                if (usuario.length > 30) {
-                    mostrarMensaje("danger", "Error: El usuario no puede tener más de 30 caracteres.");
-                    return;
-                }
-
-                // Validate Contraseña (Password)
-                if (contrasenia.length < 8) {
-                    mostrarMensaje("danger", "Error: La contraseña debe tener al menos 8 caracteres.");
-                    return;
-                }
-
-                var formData = {
-                    usuario: usuario,
-                    contrasenia: contrasenia,
-                    privilegio: privilegio,
-                    nombre: nombre,
-                };
-
-                // Perform AJAX request
-                $.ajax({
-                    type: "POST",
-                    url: "../conexion/agregar_usuarios.php",
-                    data: formData,
-                    dataType: "json",
-                    encode: true
-                }).done(function(data) {
-                    if (data.status === "success") {
-                        // Show success message
-                        mostrarMensaje("success", "¡Usuario agregado correctamente!");
-                        // Clear the form after success (optional)
-                        $("form")[0].reset();
-                    } else {
-                        // Show error message
-                        mostrarMensaje("danger", "Error al agregar usuario. Por favor, intenta nuevamente.");
-                    }
-                }).fail(function(data) {
-                    console.log("Error en la solicitud AJAX");
-                    // Show error message
-                    mostrarMensaje("danger", "Error en la solicitud AJAX. Por favor, intenta nuevamente.");
-                });
-            });
-
-            // Function to display messages
-            function mostrarMensaje(tipo, mensaje) {
-                // Clear previous messages
-                $("#mensaje").empty();
-                // Add the new message
-                $("#mensaje").append('<div class="alert alert-' + tipo + ' alert-dismissible fade show" role="alert">' +
-                    mensaje +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                    '</div>');
-            }
-        });
-    </script>
+    <script src="../controlador/agregar_usuario.js"></script>
     <title>Agregar Usuario</title>
 </head>
 
@@ -94,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="usuario">Usuario</label>
-                        <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" pattern="^[a-zA-Z0-9]{3,40}$" required >
+                        <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" pattern="^[a-zA-Z0-9]{3,40}$" required>
                     </div>
                     <div class=" form-group">
                         <label for="contrasenia">Contraseña</label>

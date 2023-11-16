@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,76 +13,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+    <script >
         var usuarioId = <?php echo isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 'null'; ?>;
-        $(document).ready(function() {
-            $("form").submit(function(event) {
-                event.preventDefault(); // Prevent the standard form submission
-
-                // Get the values from the inputs
-                var titulo = $("#titulo").val();
-                var descripcion = $("#descripcion").val();
-                var categoria = $("#categoria").val();
-                var fecha = $("#fecha").val();
-
-                // Validate the title length
-                if (titulo.length > 100) {
-                    mostrarMensaje("danger", "Error: El título no puede tener más de 100 caracteres.");
-                    return;
-                }
-
-                // Validate the description length
-                if (descripcion.length > 500) {
-                    mostrarMensaje("danger", "Error: La descripción no puede tener más de 500 caracteres.");
-                    return;
-                }
-
-                var formData = {
-                    usuarioId: usuarioId,
-                    titulo: titulo,
-                    descripcion: descripcion,
-                    categoria: categoria,
-                    fecha: fecha
-                };
-
-                console.log(formData);
-                $.ajax({
-                    type: "POST",
-                    url: "../conexion/agregar_notas.php",
-                    data: formData,
-                    dataType: "json",
-                    encode: true
-                }).done(function(data) {
-                    console.log(data);
-                    if (data.status === "success") {
-                        // Show success message
-                        mostrarMensaje("success", "¡Nota agregada correctamente!");
-                        // Clear the form after success (optional)
-                        $("form")[0].reset();
-                    } else {
-                        // Show error message
-                        mostrarMensaje("danger", "Error al agregar nota. Por favor, intenta nuevamente.");
-                    }
-                }).fail(function(data) {
-                    console.log("Error en la solicitud AJAX");
-                    // Show error message
-                    mostrarMensaje("danger", "Error en la solicitud AJAX. Por favor, intenta nuevamente.");
-                });
-            });
-
-            // Function to display messages
-            function mostrarMensaje(tipo, mensaje) {
-                // Clear previous messages
-                $("#mensaje").empty();
-                // Add the new message
-                $("#mensaje").append('<div class="alert alert-' + tipo + ' alert-dismissible fade show" role="alert">' +
-                    mensaje +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                    '</div>');
-            }
-        });
     </script>
-
+    <script src="../controlador/agregar_notas.js"></script>
     <title>Agregar Nota</title>
 </head>
 

@@ -1,6 +1,6 @@
 <?php
 // Llamado a la clase de conexión
-include("conexion.php");
+include("../conexion/conexion.php");
 
 // Obtener el ID de la nota a eliminar permanentemente
 $idNota = isset($_POST['id']) ? $_POST['id'] : 0;
