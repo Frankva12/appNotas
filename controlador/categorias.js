@@ -1,5 +1,5 @@
- // Función para abrir el modal de edición
- function abrirModalEditar(id, nombre) {
+// Función para abrir el modal de edición
+function abrirModalEditar(id, nombre) {
     $('#idCategoriaEditar').val(id);
     $('#nombreCategoria').val(nombre);
     $('#editarCategoriaModal').modal('show');
@@ -14,7 +14,22 @@ function editarCategoria() {
         return false;
     }
 
-    // Puedes realizar otras validaciones si es necesario
+    var id = $('#idCategoriaEditar').val();
+    var nuevoNombre = $('#nombreCategoria').val();
 
-    return true;
+    $.ajax({
+        url: '../modelo/editar_categoria.php', 
+        type: 'POST',
+        data: {
+            id: id,
+            nuevoNombre: nuevoNombre
+        },
+        success: function (response) {
+            if (response === 'success') {
+                location.reload();
+            } else {
+                alert('Error al editar la categoría.');
+            }
+        }
+    });
 }
