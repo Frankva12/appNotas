@@ -1,22 +1,15 @@
 <?php
-// Llamado a la clase de conexión
 include("../conexion/conexion.php");
 
-// Crear una instancia de la clase conexión
 $conn = new Conexion();
 
-// Mensajes
 $mensaje_actualizar = "";
 $mensaje_eliminar = "";
 
-// Verificar si se ha enviado un ID de categoría para eliminar
 if (isset($_GET['eliminar'])) {
     $idCategoriaEliminar = $_GET['eliminar'];
-
-    // Obtener el nombre de la categoría para mostrar en el mensaje de confirmación
     $nombreCategoria = obtenerNombreCategoria($idCategoriaEliminar, $conn);
 
-    // Mostrar el mensaje de confirmación
     echo '<script>
             if(confirm("¿Estás seguro que quieres eliminar la categoría \'' . $nombreCategoria . '\'?")) {
                 window.location.href="?confirmar_eliminar=' . $idCategoriaEliminar . '";
@@ -24,25 +17,19 @@ if (isset($_GET['eliminar'])) {
           </script>';
 }
 
-// Verificar si se ha confirmado la eliminación
 if (isset($_GET['confirmar_eliminar'])) {
     $idCategoriaEliminar = $_GET['confirmar_eliminar'];
 
     try {
-        // Preparar la consulta SQL para eliminar la categoría
         $sqlEliminarCategoria = "DELETE FROM categorias WHERE id = :idCategoria";
 
-        // Preparar la consulta
         $stmtEliminar = $conn->pdo()->prepare($sqlEliminarCategoria);
         $stmtEliminar->bindParam(':idCategoria', $idCategoriaEliminar, PDO::PARAM_INT);
 
-        // Ejecutar la consulta
         $stmtEliminar->execute();
 
-        // Mensaje de éxito al eliminar
         $mensaje_eliminar = "Categoría eliminada correctamente.";
 
-        // Redireccionar a la página de categorías después de eliminar
         header("Location: categorias.php");
         exit();
     } catch (PDOException $ex) {
@@ -56,7 +43,6 @@ if (isset($_GET['confirmar_eliminar'])) {
     }
 }
 
-// Función para obtener el nombre de la categoría
 function obtenerNombreCategoria($idCategoria, $conn)
 {
     $sql = "SELECT nombre_categoria FROM categorias WHERE id = :idCategoria";
@@ -68,10 +54,8 @@ function obtenerNombreCategoria($idCategoria, $conn)
     return $resultado['nombre_categoria'];
 }
 
-// Establecer consulta de selección a la tabla categorías
 $sql = "SELECT id, nombre_categoria FROM categorias;";
 
-// Ejecutar la consulta SQL
 $res = $conn->MostrarSQL($sql);
 ?>
 

@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $privilegio = $_POST["privilegio"];
     $nombre = $_POST["nombre"];
     try {
-        $connPDO = new PDO('mysql:host='.server.';dbname='.database, user, password);
+        $connPDO = new PDO('mysql:host=' . server . ';dbname=' . database, user, password);
         $connPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "INSERT INTO dbnotas.usuarios (usuario, contrasenia, privilegio, nombre) VALUES (:usuario, :contrasenia, :privilegio, :nombre)";
         $stmt = $connPDO->prepare($sql);

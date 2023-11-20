@@ -1,16 +1,12 @@
 <?php
-session_start(); // Iniciar sesión
+session_start();
 
-// Llamado a la clase de conexión
 include("../conexion/conexion.php");
 
-// Crear una instancia de la clase conexión
 $conn = new conexion();
 
-// Obtener el ID del usuario en sesión
 $idUsuario = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 
-// Verificar si hay un mensaje en el URL y mostrarlo
 $mensaje = isset($_GET['mensaje']) ? $_GET['mensaje'] : '';
 if ($mensaje === 'success_restore') {
     echo '<div id="restore-message" class="alert alert-success">La nota se ha restaurado exitosamente.</div>';
@@ -28,7 +24,6 @@ if ($mensaje === 'success_restore') {
           </script>';
 }
 
-// Establecer consulta de selección a la tabla notas eliminadas del usuario
 $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.fecha, n.estado 
         FROM notas n 
         INNER JOIN usuarios u ON n.id_usuario = u.id 
@@ -36,16 +31,12 @@ $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.f
         WHERE n.estado = 0 AND n.id_usuario = :idUsuario
         ORDER BY n.fecha ASC";
 
-// Preparar la consulta SQL
 $stmt = $conn->pdo()->prepare($sql);
 
-// Asociar el parámetro ID del usuario en sesión a la consulta
 $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
-// Ejecutar la consulta SQL
 $stmt->execute();
 
-// Obtener los resultados
 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 function getCardClass($noteDate)

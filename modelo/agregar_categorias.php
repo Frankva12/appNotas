@@ -3,7 +3,7 @@ include("../conexion/parametros.php");
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $nombre = $_POST["nombre"];
     try {
-        $connPDO = new PDO('mysql:host='.server.';dbname='.database, user, password);
+        $connPDO = new PDO('mysql:host=' . server . ';dbname=' . database, user, password);
         $connPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "INSERT INTO dbnotas.categorias (nombre_categoria) VALUES (:nombre_categoria)";
         $stmt = $connPDO->prepare($sql);

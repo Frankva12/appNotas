@@ -14,7 +14,6 @@ function abrirModalEditarUsuario(element) {
     $('#editarUsuarioModal').modal('show');
 }
 
-// Función para enviar la solicitud de edición de usuario
 function editarUsuario() {
     var id = $('#idUsuarioEditar').val();
     var nuevoNombre = $('#nombreUsuario').val();
@@ -38,9 +37,8 @@ function editarUsuario() {
         return;
     }
 
-    // Realizar la solicitud AJAX para editar el usuario
     $.ajax({
-        url: '../modelo/editar_usuario.php', // Reemplaza con el nombre de tu archivo de edición de usuario
+        url: '../modelo/editar_usuario.php',
         type: 'POST',
         data: {
             id: id,
@@ -51,7 +49,6 @@ function editarUsuario() {
         },
         success: function(response) {
             if (response === 'success') {
-                // Recargar la página después de editar
                 location.href = 'usuarios.php?mensaje=success_update';
             } else {
                 alert('Error al editar el usuario.');

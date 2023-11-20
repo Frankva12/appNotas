@@ -17,12 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fecha = $_POST["fecha"];
 
     try {
-        $connPDO = new PDO('mysql:host='.server.';dbname='.database, user, password);
+        $connPDO = new PDO('mysql:host=' . server . ';dbname=' . database, user, password);
         $connPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
+
         $sql = "INSERT INTO notas (id_usuario, titulo, descripcion, categoria_id, fecha) VALUES (:id_usuario, :titulo, :descripcion, :categoria, :fecha)";
         $stmt = $connPDO->prepare($sql);
-        
+
         $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
         $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
         $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
@@ -41,4 +41,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $response = array("status" => "error", "message" => "Invalid request method");
     echo json_encode($response);
 }
-?>

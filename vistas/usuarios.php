@@ -1,13 +1,10 @@
 <?php
 session_start();
 
-// Llamado a la clase de conexión
 include("../conexion/conexion.php");
 
-// Crear una instancia de la clase conexión
 $conn = new conexion();
 
-// Verificar si hay un mensaje en el URL y mostrarlo
 $mensaje = isset($_GET['mensaje']) ? $_GET['mensaje'] : '';
 if ($mensaje === 'success_update') {
     echo '<div id="update-message" class="alert alert-success">El usuario se ha actualizado exitosamente.</div>';
@@ -25,10 +22,8 @@ if ($mensaje === 'success_update') {
           </script>';
 }
 
-// Establecer consulta de selección a la tabla empleados
 $sql = "SELECT id, nombre, usuario, contrasenia, privilegio FROM dbnotas.usuarios;";
 
-// Ejecutar la consulta SQL
 $res = $conn->MostrarSQL($sql);
 ?>
 

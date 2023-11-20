@@ -1,13 +1,10 @@
 <?php
-session_start(); // Iniciar sesión
+session_start();
 
-// Llamado a la clase de conexión
 include("../conexion/conexion.php");
 
-// Crear una instancia de la clase conexión
 $conn = new conexion();
 
-// Obtener el ID del usuario en sesión
 $idUsuario = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0;
 
 // Verificar si hay un mensaje en el URL y mostrarlo
@@ -37,16 +34,13 @@ $sql = "SELECT n.id, u.usuario, n.titulo, n.descripcion, c.nombre_categoria, n.f
         ORDER BY n.fecha ASC;
         ";
 
-// Preparar la consulta SQL
 $stmt = $conn->pdo()->prepare($sql);
 
 // Asociar el parámetro ID del usuario en sesión a la consulta
 $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
-// Ejecutar la consulta SQL
 $stmt->execute();
 
-// Obtener los resultados
 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 function getCardClass($noteDate)
@@ -96,7 +90,7 @@ $categorias = $resultadoCategorias->fetchAll(PDO::FETCH_ASSOC);
             <a href="papelera.php" class="btn btn-warning mt-3">Papelera</a>
             <a href="../modelo/cerrar_session.php" class="btn btn-danger mt-3">Cerrar Sesión</a>
         </div>
-        
+
         <?php if (empty($res)) : ?>
             <div class="alert alert-info mt-3" role="alert">
                 No hay notas para este usuario.

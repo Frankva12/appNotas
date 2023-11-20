@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $estado = $_POST["estado"];
 
     try {
-        $connPDO = new PDO('mysql:host='.server.';dbname='.database, user, password);
+        $connPDO = new PDO('mysql:host=' . server . ';dbname=' . database, user, password);
         $connPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $sql = "UPDATE notas SET estado = :estado WHERE id = :id";
@@ -25,4 +25,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $response = array("status" => "error", "message" => "Método de solicitud no válido");
     echo json_encode($response);
 }
-?>

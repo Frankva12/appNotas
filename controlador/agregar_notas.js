@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $("form").submit(function(event) {
+$(document).ready(function () {
+    $("form").submit(function (event) {
         event.preventDefault();
 
         var titulo = $("#titulo").val();
@@ -33,7 +33,7 @@ $(document).ready(function() {
             data: formData,
             dataType: "json",
             encode: true
-        }).done(function(data) {
+        }).done(function (data) {
             console.log(data);
             if (data.status === "success") {
                 mostrarMensaje("success", "¡Nota agregada correctamente!");
@@ -41,7 +41,7 @@ $(document).ready(function() {
             } else {
                 mostrarMensaje("danger", "Error al agregar nota. Por favor, intenta nuevamente.");
             }
-        }).fail(function(data) {
+        }).fail(function (data) {
             console.log("Error en la solicitud AJAX");
             mostrarMensaje("danger", "Error en la solicitud AJAX. Por favor, intenta nuevamente.");
         });

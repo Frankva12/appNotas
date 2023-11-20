@@ -10,9 +10,7 @@ function restaurarNota(idNota) {
             dataType: "json",
             encode: true
         }).done(function(data) {
-            // Recargar la página después de restaurar la nota
             if (data.status === "success") {
-                // Redirigir a la página de notas eliminadas con un mensaje de éxito
                 window.location.href = 'papelera.php?mensaje=success_restore';
             } else {
                 console.log("Error al restaurar la nota");
@@ -25,7 +23,6 @@ function restaurarNota(idNota) {
 
 function eliminarNota(idNota) {
     if (confirm("¿Estás seguro que quieres eliminar permanentemente esta nota?")) {
-        // Realizar la petición AJAX para eliminar permanentemente la nota
         $.ajax({
             type: "POST",
             url: "../modelo/eliminar_nota.php",
@@ -35,9 +32,7 @@ function eliminarNota(idNota) {
             dataType: "json",
             encode: true
         }).done(function(data) {
-            // Recargar la página después de eliminar permanentemente la nota
             if (data.status === "success") {
-                // Redirigir a la página de notas eliminadas con un mensaje de éxito
                 window.location.href = 'papelera.php?mensaje=success_permanent_delete';
             } else {
                 console.log("Error al eliminar permanentemente la nota");
